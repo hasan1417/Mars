@@ -1,5 +1,3 @@
-const { resolve } = require("node:path")
-
 let store = {
     user: { name: "Student" },
     apod: '',
@@ -63,21 +61,24 @@ const App = (state) => {
     `
 }
 
-const selectRover =  (rover)=>{
-    let roverData =  roverInfo(rover)
-        return ( `
-        <div id="${rover}" class="tabcontent">
-        <h6><b>Rover name:</b> ${roverData.photo_manifest.name}</h6>
-        <h6><b>Launch date:</b> ${roverData.photo_manifest.launch_date}</h6>
-        <h6><b>Landing date:</b> ${roverData.photo_manifest.landing_date}</h6>
-        <h6><b>Status:</b> ${roverData.photo_manifest.status}</h6>
-        <h6><b>Most recently available photos:</b>${roverData.photo_manifest.max_sol}</h6>
-        <h6><b>Date the most recent photos were taken:</b>${roverData.photo_manifest.max_date}</h6>
-        
-    </div>
-    `)
-
-}
+const selectRover =  async (rover)=>{
+    let roverData =  await roverInfo(rover)
+        .then(roverData=>{
+            return `
+            <div id="${rover}" class="tabcontent">
+            <h6><b>Rover name:</b> ${roverData.photo_manifest.name}</h6>
+            <h6><b>Launch date:</b> ${roverData.photo_manifest.launch_date}</h6>
+            <h6><b>Landing date:</b> ${roverData.photo_manifest.landing_date}</h6>
+            <h6><b>Status:</b> ${roverData.photo_manifest.status}</h6>
+            <h6><b>Most recently available photos:</b>${roverData.photo_manifest.max_sol}</h6>
+            <h6><b>Date the most recent photos were taken:</b>${roverData.photo_manifest.max_date}</h6>
+            
+        </div>
+        `
+        })
+        .then(res=> res.json())
+    }
+ 
 // listening for load event because page should load before any JS is called
 window.addEventListener('load', () => {
     render(root, store)
