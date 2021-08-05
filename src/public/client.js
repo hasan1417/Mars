@@ -21,7 +21,7 @@ const roverInfo = async (rover)=>{
         headers: {
             'Rover': rover
         }
-    })
+    }).then(res=> res.json())
     console.log(res)
     return res
 }
@@ -61,9 +61,8 @@ const App = (state) => {
     `
 }
 
-const selectRover =  async (rover)=>{
-    let roverData =  await roverInfo(rover)
-        .then(roverData=>{
+const selectRover =  (rover)=>{
+    let roverData =  roverInfo(rover)
             return `
             <div id="${rover}" class="tabcontent">
             <h6><b>Rover name:</b> ${roverData.photo_manifest.name}</h6>
@@ -75,10 +74,8 @@ const selectRover =  async (rover)=>{
             
         </div>
         `
-        })
-        .then(res=> res.json())
     }
- 
+
 // listening for load event because page should load before any JS is called
 window.addEventListener('load', () => {
     render(root, store)
@@ -96,4 +93,3 @@ window.addEventListener('load', () => {
 // 				wrapper.appendChild(img);
 // 		})
 // }
-
