@@ -28,9 +28,9 @@ app.get('/apod', async (req, res) => {
 app.get('/nasarover', async (req, res) => {
     try {
         let roverName = req.get('Rover')
-        let image = await fetch(`https://api.nasa.gov/mars-photos/api/v1/manifests/${roverName}?api_key=${process.env.API_KEY}`)
+        let roverDetails = await fetch(`https://api.nasa.gov/mars-photos/api/v1/manifests/${roverName}?api_key=${process.env.API_KEY}`)
             .then(res => res.json())
-        res.send({ roverDetails })
+        res.send(roverDetails)
     } catch (err) {
         console.log('error:', err);
     }

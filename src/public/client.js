@@ -13,7 +13,7 @@ const updateStore = (store, newState) => {
 }
 
 const render = async (root, state) => {
-    root.innerHTML = App(state)
+    root.innerHTML = await App(state)
 }
 
 const roverInfo = async (rover)=>{
@@ -41,11 +41,14 @@ const Greeting = (name) => {
 }
 
 // create content
-const App = (state) => {
+const App = async (state) => {
 
     let { rovers, apod } = state
 
-    return `
+    // const res = await rovers.map(rover=> selectRover(rover))
+
+    return Promise.all(rovers.map(rover => selectRover(rover))).then((values) => {
+        return `
         <header></header>
         <main>
         <div class="tab">
@@ -53,17 +56,17 @@ const App = (state) => {
         <button class="tablinks" onclick="openCity(event, 'Paris')">${rovers[1]}</button>
         <button class="tablinks" onclick="openCity(event, 'Tokyo')">${rovers[2]}</button>
         </div>
-            ${rovers.map(rover=>{
-                return selectRover(rover)
-        })}
+            ${values}
         </main>
         <footer></footer>
     `
+    })
 }
 
 const selectRover = async (rover)=>{
     let roverData = await roverInfo(rover)
-            return `
+    console.log(roverData)
+    return `
             <div id="${rover}" class="tabcontent">
             <h6><b>Rover name:</b> ${roverData.photo_manifest.name}</h6>
             <h6><b>Launch date:</b> ${roverData.photo_manifest.launch_date}</h6>
