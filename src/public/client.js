@@ -61,8 +61,8 @@ const App = (state) => {
     `
 }
 
-const selectRover =  (rover)=>{
-    let roverData =  roverInfo(rover)
+const selectRover = async (rover)=>{
+    let roverData = await roverInfo(rover)
             return `
             <div id="${rover}" class="tabcontent">
             <h6><b>Rover name:</b> ${roverData.photo_manifest.name}</h6>
